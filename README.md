@@ -7,7 +7,7 @@ The application should be able to create shortlink that redirects to the origina
 
 ### Local
 
-The project uses [go mod]().
+The project uses [go mod](https://blog.golang.org/using-go-modules).
 
 Run with
 ```
@@ -45,7 +45,9 @@ The shortlink url will redirect (301 Moved Permanently) to the original url (`ht
 ## TODOs
 
 Must
-* Unit tests using testify
+* Return shortlink in PUT route response
+* Unit tests using [testify](https://github.com/stretchr/testify)
+* Log with [zerolog](https://github.com/rs/zerolog)
 * Dockerize application
 
 Should
