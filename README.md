@@ -1,6 +1,6 @@
-# URL Shortner Go Kata
+# URL Shortener Go Kata
 
-URL Shortner example service written in Go.
+URL Shortener example service written in Go.
 The application should be able to create shortlink that redirects to the original url.
 
 ##  Installation
@@ -40,3 +40,13 @@ Date: Fri, 01 May 2020 13:59:33 GMT
 ```
 
 The shortlink url will redirect (301 Moved Permanently) to the original url (`https://www.google.com`).
+
+
+## TODOs
+
+Must
+* Unit tests using testify
+* Dockerize application
+
+Should
+* Use adaptable-lenght SHA-1 instead of ULID for IDs
