@@ -62,4 +62,4 @@ Must
 * Dockerize application
 
 Should
-* Use adaptable-lenght SHA-1 instead of ULID for IDs
+* better ID generation function (ULID is not that short)
