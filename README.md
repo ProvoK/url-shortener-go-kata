@@ -3,7 +3,18 @@
 URL Shortener example service written in Go.
 The application should be able to create shortlink that redirects to the original url.
 
-##  Installation
+##  Running
+
+The web application as the following flags:
+```
+Usage of ./web:
+  -host string
+    	public host where the application is located (default "localhost")
+  -https
+    	is application under https
+  -port string
+    	application's port (default "8080")
+```
 
 ### Local
 
@@ -11,7 +22,8 @@ The project uses [go mod](https://blog.golang.org/using-go-modules).
 
 Run with
 ```
-go run ./cmd/web/main.go
+go build -o web ./cmd/web
+./web
 ```
 The service starts at port 8080.
 
@@ -45,7 +57,6 @@ The shortlink url will redirect (301 Moved Permanently) to the original url (`ht
 ## TODOs
 
 Must
-* Return shortlink in PUT route response
 * Unit tests using [testify](https://github.com/stretchr/testify)
 * Log with [zerolog](https://github.com/rs/zerolog)
 * Dockerize application

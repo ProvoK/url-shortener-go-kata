@@ -14,7 +14,7 @@ import (
 	"github.com/go-chi/chi/middleware"
 )
 
-func putURL(controller shortener.Controller) func(http.ResponseWriter, *http.Request) {
+func putURL(controller shortener.Controller, config Config) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 		body, err := ioutil.ReadAll(r.Body)
@@ -38,7 +38,7 @@ func putURL(controller shortener.Controller) func(http.ResponseWriter, *http.Req
 			return
 		}
 
-		id, err := controller.Shorten(context.TODO(), req.URL)
+		ID, err := controller.Shorten(context.TODO(), req.URL)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(map[string]string{
@@ -48,8 +48,13 @@ func putURL(controller shortener.Controller) func(http.ResponseWriter, *http.Req
 		}
 
 		w.WriteHeader(http.StatusOK)
+		protocol := "http"
+		if config.https {
+			protocol = "https"
+		}
 		json.NewEncoder(w).Encode(map[string]string{
-			"id": id,
+			"id":        ID,
+			"shortlink": fmt.Sprintf("%s://%s:%s/r/%s", protocol, config.host, config.port, ID),
 		})
 
 	}
@@ -85,7 +90,7 @@ func main() {
 	}
 	controller := shortener.NewController(bk)
 
-	r.Put("/urls", putURL(controller))
+	r.Put("/urls", putURL(controller, config))
 	r.Get("/r/{ID}", redirect(controller))
-	http.ListenAndServe(":8080", r)
+	http.ListenAndServe(fmt.Sprintf(":%s", config.port), r)
 }

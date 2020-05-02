@@ -17,3 +17,4 @@
 
 # bbolt db
 *.db
+web
