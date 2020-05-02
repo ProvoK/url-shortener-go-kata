@@ -22,11 +22,12 @@ func NewRequest(URL string) Request {
 }
 
 type Environment struct {
-	storer Storer
+	storer      Storer
+	idGenerator func() string
 }
 
 func NewEnvironment(s Storer) Environment {
-	return Environment{storer: s}
+	return Environment{storer: s, idGenerator: NewULID}
 }
 
 func NewULID() string {
@@ -37,7 +38,7 @@ func NewULID() string {
 }
 
 func URLStore(ctx context.Context, env Environment, req Request) (ID string, err error) {
-	uid := NewULID()
+	uid := env.idGenerator()
 
 	if err := env.storer.Store(uid, req.URL); err != nil {
 		return "", err
