@@ -31,7 +31,7 @@ func TestURLStoreOK(t *testing.T) {
 
 	shortID, err := URLStore(
 		context.TODO(),
-		Environment{storer: storer, idGenerator: func() string { return ID }},
+		Environment{storer: storer, idGenerator: func(a int) string { return ID }},
 		Request{URL: URL},
 	)
 
@@ -48,7 +48,7 @@ func TestURLStoreKO(t *testing.T) {
 
 	_, rErr := URLStore(
 		context.TODO(),
-		Environment{storer: storer, idGenerator: func() string { return "123" }},
+		Environment{storer: storer, idGenerator: func(a int) string { return "123" }},
 		Request{URL: "dummy"},
 	)
 
@@ -56,9 +56,9 @@ func TestURLStoreKO(t *testing.T) {
 	assert.Error(err)
 }
 
-func TestDefaultGeneratorIsULID(t *testing.T) {
+func TestDefaultGeneratorIsID(t *testing.T) {
 	s := StoreMock{}
-	assert.IsType(t, NewULID, NewEnvironment(&s).idGenerator)
+	assert.IsType(t, NewID, NewEnvironment(&s).idGenerator)
 }
 
 func TestNewRequestConstructor(t *testing.T) {
@@ -66,10 +66,14 @@ func TestNewRequestConstructor(t *testing.T) {
 	assert.Equal(t, "url", req.URL)
 }
 
-func TestNewULIDReturnsString(t *testing.T) {
-	assert.IsType(t, "", NewULID())
+func TestNewIDReturnsString(t *testing.T) {
+	for i := 1; i <= 26; i++ {
+		ID := NewID(i)
+		assert.IsType(t, "", ID)
+		assert.Equal(t, i, len(ID))
+	}
 }
 
-func TestNewULIDReturnsChangesWithInvokation(t *testing.T) {
-	assert.NotEqual(t, NewULID(), NewULID())
+func TestNewIDReturnsChangesWithInvokation(t *testing.T) {
+	assert.NotEqual(t, NewID(6), NewID(6))
 }

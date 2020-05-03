@@ -60,6 +60,3 @@ Must
 * Unit tests using [testify](https://github.com/stretchr/testify)
 * Log with [zerolog](https://github.com/rs/zerolog)
 * Dockerize application
-
-Should
-* better ID generation function (ULID is not that short)

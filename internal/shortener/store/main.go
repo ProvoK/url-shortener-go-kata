@@ -2,6 +2,7 @@ package store
 
 import (
 	"context"
+	"crypto/sha1"
 	"fmt"
 	"math/rand"
 	"time"
@@ -23,22 +24,26 @@ func NewRequest(URL string) Request {
 
 type Environment struct {
 	storer      Storer
-	idGenerator func() string
+	idGenerator func(length int) string
+	idMaxLength int
 }
 
 func NewEnvironment(s Storer) Environment {
-	return Environment{storer: s, idGenerator: NewULID}
+	return Environment{storer: s, idGenerator: NewID, idMaxLength: 6}
 }
 
-func NewULID() string {
+func NewID(length int) string {
 	t := time.Now().UTC()
 	entropy := rand.New(rand.NewSource(t.UnixNano()))
 	id := ulid.MustNew(ulid.Timestamp(t), entropy)
-	return fmt.Sprintf("%v", id)
+
+	h := sha1.New()
+	h.Write([]byte(fmt.Sprintf("%s", id)))
+	return fmt.Sprintf("%x", h.Sum(nil))[:length]
 }
 
 func URLStore(ctx context.Context, env Environment, req Request) (ID string, err error) {
-	uid := env.idGenerator()
+	uid := env.idGenerator(env.idMaxLength)
 
 	if err := env.storer.Store(uid, req.URL); err != nil {
 		return "", err
