@@ -60,3 +60,6 @@ Must
 * Unit tests using [testify](https://github.com/stretchr/testify)
 * Log with [zerolog](https://github.com/rs/zerolog)
 * Dockerize application
+
+Nice To Have
+* Expire older than {x} links, configurable when starting the service
